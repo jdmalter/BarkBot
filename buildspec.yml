@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    commands:
+    - aws cloudformation package --template-file template.yaml --s3-bucket bark-bot --output-template-file outputTemplate.yaml
+  build:
+    commands:
+    - mvn test
+  post_build:
+    commands:
+    - mvn package
+artifacts:
+  type: zip
+  files:
+  - bark-bot-1.0-SNAPSHOT.jar
+  - template.yaml
+  - outputTemplate.yaml

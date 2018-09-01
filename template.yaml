@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Barks at bad boys
+Resources:
+  BarkBot:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: barkbot.Launcher::handleRequest
+      Runtime: java8
+      Environment:
+        Variables:
+          MAX_LABELS: 10
+          MIN_CONFIDENCE: 50
+          RETRY_TIMEOUT: 1000
+      Events:
+        GroupMeCallBack:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
