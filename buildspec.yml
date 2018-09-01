@@ -12,7 +12,7 @@ phases:
 artifacts:
   type: zip
   files:
-  - bark-bot-1.0-SNAPSHOT.jar
-  - template.yaml
-  - outputTemplate.yaml
+  - target/bark-bot-1.0-SNAPSHOT.jar
+  - target/template.yaml
+  - target/outputTemplate.yaml
   discard-paths: yes
