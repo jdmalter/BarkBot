@@ -7,6 +7,7 @@ Resources:
     Properties:
       Handler: barkbot.Launcher::handleRequest
       Runtime: java8
+      CodeUri: build/distributions/bark-bot-1.0-SNAPSHOT.jar
       Environment:
         Variables:
           MAX_LABELS: 10

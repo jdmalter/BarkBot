@@ -15,3 +15,4 @@ artifacts:
   - bark-bot-1.0-SNAPSHOT.jar
   - template.yaml
   - outputTemplate.yaml
+  discard-paths: yes
