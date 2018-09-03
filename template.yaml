@@ -10,7 +10,7 @@ Resources:
       CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
       FunctionName: BarkBot
       Description: Handles new messages
-      MemorySize: 192
+      MemorySize: 256
       Timeout: 30
       Environment:
         Variables:
