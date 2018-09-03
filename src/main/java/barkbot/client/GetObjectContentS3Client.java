@@ -6,12 +6,14 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
 import com.google.common.base.Preconditions;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 
+@Slf4j
 public class GetObjectContentS3Client {
     static final Charset CHARSET = Charset.defaultCharset();
 
@@ -30,12 +32,14 @@ public class GetObjectContentS3Client {
     }
 
     public String call(@NonNull final String bucketName, @NonNull final String key) {
+        log.info("bucketName={} key={}", bucketName, key);
         try {
             return safeCall(s3.getObject(bucketName, key));
 
         } catch (final AmazonServiceException e) {
             switch (e.getErrorType()) {
                 case Client:
+                    log.error("AmazonServiceException={}", e);
                     throw new RuntimeException("bug in configuration");
 
                 case Service:
@@ -46,10 +50,12 @@ public class GetObjectContentS3Client {
                     return safeCall(s3.getObject(bucketName, key));
 
                 default:
+                    log.error("AmazonServiceException={}", e);
                     throw new RuntimeException("bug of unknown origin");
             }
 
         } catch (final SdkClientException e) {
+            log.error("SdkClientException={}", e);
             throw new RuntimeException("bug in configuration");
         }
     }
@@ -59,6 +65,7 @@ public class GetObjectContentS3Client {
             return IOUtils.toString(s3Object.getObjectContent(), CHARSET);
 
         } catch (final IOException e) {
+            log.error("IOException={}", e);
             throw new UncheckedIOException("error in low-level I/O", e);
         }
     }
