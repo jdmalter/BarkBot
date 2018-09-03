@@ -10,7 +10,6 @@ phases:
       --template-file template.yaml
       --s3-bucket bark-bot
       --output-template-file outputTemplate.yaml
-      --output zip > bark-bot-1.0-SHANPSHOT.zip
 artifacts:
   files:
   - target/bark-bot-1.0-SNAPSHOT.jar
