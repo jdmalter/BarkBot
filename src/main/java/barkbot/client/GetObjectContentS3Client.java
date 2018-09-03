@@ -39,7 +39,7 @@ public class GetObjectContentS3Client {
         } catch (final AmazonServiceException e) {
             switch (e.getErrorType()) {
                 case Client:
-                    log.error("AmazonServiceException={}", e);
+                    log.error("bug in configuration", e);
                     throw new RuntimeException("bug in configuration");
 
                 case Service:
@@ -50,12 +50,12 @@ public class GetObjectContentS3Client {
                     return safeCall(s3.getObject(bucketName, key));
 
                 default:
-                    log.error("AmazonServiceException={}", e);
+                    log.error("bug of unknown origin", e);
                     throw new RuntimeException("bug of unknown origin");
             }
 
         } catch (final SdkClientException e) {
-            log.error("SdkClientException={}", e);
+            log.error("bug in configuration", e);
             throw new RuntimeException("bug in configuration");
         }
     }
@@ -65,7 +65,7 @@ public class GetObjectContentS3Client {
             return IOUtils.toString(s3Object.getObjectContent(), CHARSET);
 
         } catch (final IOException e) {
-            log.error("IOException={}", e);
+            log.error("error in low-level I/O", e);
             throw new UncheckedIOException("error in low-level I/O", e);
         }
     }

@@ -3,6 +3,7 @@ package barkbot.client;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -13,6 +14,7 @@ import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.util.function.Supplier;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PostToGroupMeClient {
     private static final String POST_URL = "https://api.groupme.com/v3/bots/post";
@@ -23,6 +25,7 @@ public class PostToGroupMeClient {
     private final Supplier<String> botIdSupplier;
 
     public void call(@NonNull final String text) {
+        log.info("text={}", text);
         final HttpPost post = new HttpPost(POST_URL);
         try {
             post.setEntity(
@@ -31,6 +34,7 @@ public class PostToGroupMeClient {
                                     new BasicNameValuePair("bot_id", botIdSupplier.get()),
                                     new BasicNameValuePair("text", text))));
         } catch (final UnsupportedEncodingException e) {
+            log.error("bug in JVM; buy lottery tickets", e);
             throw new AssertionError("bug in JVM; buy lottery tickets");
         }
 
@@ -42,6 +46,7 @@ public class PostToGroupMeClient {
             client.execute(post);
 
         } catch (final IOException e) {
+            log.error("error in connection", e);
             throw new UncheckedIOException("error in connection", e);
         }
     }

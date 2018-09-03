@@ -4,9 +4,11 @@ import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.model.*;
 import com.google.common.base.Preconditions;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class DetectLabelsRekognitionClient {
     @NonNull
     private final AmazonRekognition rekognition;
@@ -38,6 +40,7 @@ public class DetectLabelsRekognitionClient {
     }
 
     public List<Label> call(@NonNull final Image image) {
+        log.info("maxLabels={} minConfidence={}", maxLabels, minConfidence);
         final DetectLabelsRequest request = new DetectLabelsRequest()
                 .withMaxLabels(maxLabels)
                 .withMinConfidence(minConfidence)
@@ -60,15 +63,19 @@ public class DetectLabelsRekognitionClient {
             return rekognition.detectLabels(request).getLabels();
 
         } catch (final InvalidParameterException e) {
+            log.error("bug in configuration", e);
             throw new RuntimeException("bug in configuration");
 
         } catch (final ImageTooLargeException e) {
+            log.error("image is too large", e);
             throw new IllegalArgumentException("image is too large");
 
         } catch (final AccessDeniedException e) {
+            log.error("bad credentials", e);
             throw new RuntimeException("bad credentials");
 
         } catch (final InvalidImageFormatException e) {
+            log.error("bad image format", e);
             throw new IllegalArgumentException("bad image format");
         }
     }

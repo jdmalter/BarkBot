@@ -27,3 +27,4 @@ Resources:
             Method: POST
       Policies:
       - AmazonRekognitionFullAccess
+      - AmazonS3ReadOnlyAccess
