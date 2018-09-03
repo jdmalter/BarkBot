@@ -7,6 +7,10 @@ Resources:
     Properties:
       Handler: barkbot.Launcher::handleRequest
       Runtime: java8
+      FunctionName: BarkBot
+      Description: Handles new messages
+      MemorySize: 192
+      Timeout: 30
       Environment:
         Variables:
           MAX_LABELS: 10
