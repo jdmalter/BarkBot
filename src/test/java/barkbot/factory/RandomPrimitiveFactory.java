@@ -1,10 +1,12 @@
 package barkbot.factory;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.Random;
 
 public class RandomPrimitiveFactory {
     private static final Random RANDOM = new Random();
-    private static final int MAXIMUM_BYTES_IN_STRING = 16;
+    private static final int MAXIMUM_CHARACTERS = 16;
 
     private RandomPrimitiveFactory() {
         throw new UnsupportedOperationException();
@@ -31,8 +33,6 @@ public class RandomPrimitiveFactory {
     }
 
     public static String createString() {
-        final byte[] bytes = new byte[RANDOM.nextInt(MAXIMUM_BYTES_IN_STRING)];
-        RANDOM.nextBytes(bytes);
-        return new String(bytes);
+        return RandomStringUtils.randomAscii(RANDOM.nextInt(MAXIMUM_CHARACTERS));
     }
 }
