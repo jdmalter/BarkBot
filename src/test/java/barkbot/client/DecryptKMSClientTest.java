@@ -30,9 +30,11 @@ class DecryptKMSClientTest {
         final String expected = "expected";
         final String secret = RandomPrimitiveFactory.createString();
         final DecryptRequest request = new DecryptRequest()
-                .withCiphertextBlob(ByteBuffer.wrap(secret.getBytes()));
+                .withCiphertextBlob(
+                        ByteBuffer.wrap(secret.getBytes(DecryptKMSClient.CHARSET)));
         final DecryptResult result = new DecryptResult()
-                .withPlaintext(ByteBuffer.wrap(expected.getBytes()));
+                .withPlaintext(
+                        ByteBuffer.wrap(expected.getBytes(DecryptKMSClient.CHARSET)));
         Mockito.when(awskms.decrypt(request)).thenReturn(result);
 
         final String actual = subject.decrypt(secret);
