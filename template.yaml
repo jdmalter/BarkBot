@@ -23,3 +23,5 @@ Resources:
           Properties:
             Path: /
             Method: POST
+      Policies:
+      - AmazonRekognitionFullAccess
