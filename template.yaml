@@ -17,7 +17,8 @@ Resources:
           MAX_LABELS: 10
           MIN_CONFIDENCE: 50
           RETRY_TIMEOUT: 1000
-          SECRET: AQICAHjrsPX5p9oTVDeV3RAt/8lmdGo73kyFBtH34y0u+LvvEgH+ZNvr2uorpX98sGHo8iseAAAAeDB2BgkqhkiG9w0BBwagaTBnAgEAMGIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMBwSqhqezhlax6BOdAgEQgDXXht3ANeveh9wayw5rARaVDoWLE5SnTZXz+JzvYlhwkao+Ece/K2z3S7v0GC0IY5cGNbTyHA==
+          BUCKET_NAME: bot-id
+          KEY: BarkBotBeta.txt
       Events:
         GroupMeCallBack:
           Type: Api

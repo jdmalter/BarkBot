@@ -11,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class PostToGroupMeClient {
@@ -19,7 +20,7 @@ public class PostToGroupMeClient {
     @NonNull
     private final HttpClient client;
     @NonNull
-    private final String botId;
+    private final Supplier<String> botIdSupplier;
 
     public void call(@NonNull final String text) {
         final HttpPost post = new HttpPost(POST_URL);
@@ -27,7 +28,7 @@ public class PostToGroupMeClient {
             post.setEntity(
                     new UrlEncodedFormEntity(
                             Lists.newArrayList(
-                                    new BasicNameValuePair("bot_id", botId),
+                                    new BasicNameValuePair("bot_id", botIdSupplier.get()),
                                     new BasicNameValuePair("text", text))));
         } catch (final UnsupportedEncodingException e) {
             throw new AssertionError("bug in JVM; buy lottery tickets");
@@ -39,6 +40,7 @@ public class PostToGroupMeClient {
     private void safeCall(final HttpPost post) {
         try {
             client.execute(post);
+
         } catch (final IOException e) {
             throw new UncheckedIOException("error in connection", e);
         }

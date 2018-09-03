@@ -19,12 +19,10 @@ class PostToGroupMeClientTest {
     private PostToGroupMeClient subject;
     @Mock
     private HttpClient client;
-    private String botId;
 
     @BeforeEach
     void setUp() {
-        botId = RandomPrimitiveFactory.createString();
-        subject = new PostToGroupMeClient(client, botId);
+        subject = new PostToGroupMeClient(client, RandomPrimitiveFactory::createString);
     }
 
     @Test
