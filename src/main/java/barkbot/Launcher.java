@@ -1,6 +1,7 @@
 package barkbot;
 
 import barkbot.model.Request;
+import barkbot.model.Response;
 import barkbot.provider.HandlerProvider;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -8,7 +9,7 @@ import lombok.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class Launcher implements RequestHandler<Request, Void> {
+public class Launcher implements RequestHandler<Request, Response> {
     @NonNull
     private final ApplicationContext applicationContext;
 
@@ -21,9 +22,9 @@ public class Launcher implements RequestHandler<Request, Void> {
     }
 
     @Override
-    public Void handleRequest(@NonNull final Request request, final Context context) {
+    public Response handleRequest(@NonNull final Request request, final Context context) {
         final Handler handler = applicationContext.getBean(Handler.class);
         handler.accept(request.getBody());
-        return null;
+        return Response.ok();
     }
 }
