@@ -7,7 +7,7 @@ Resources:
     Properties:
       Handler: barkbot.Launcher::handleRequest
       Runtime: java8
-      CodeUri: /src/main/java/barkbot
+      CodeUri: /src/target/bark-bot-1.0-SNAPSHOT.jar
       FunctionName: BarkBot
       Description: Handles new messages
       MemorySize: 192
