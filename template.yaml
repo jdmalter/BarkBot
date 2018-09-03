@@ -1,17 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Barks at bad boys
+Description: Barks at bad boys!
 Resources:
-  BarkBot:
+  BarkBotBeta:
     Type: AWS::Serverless::Function
     Properties:
       Handler: barkbot.Launcher::handleRequest
       Runtime: java8
       CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
       FunctionName: BarkBot
-      Description: Handles new messages
+      Description: Handles new messages.
       MemorySize: 256
       Timeout: 30
+      Policies:
+      - AmazonRekognitionFullAccess
+      - AmazonS3ReadOnlyAccess
       Environment:
         Variables:
           MAX_LABELS: 10
@@ -25,6 +28,3 @@ Resources:
           Properties:
             Path: /
             Method: POST
-      Policies:
-      - AmazonRekognitionFullAccess
-      - AmazonS3ReadOnlyAccess
