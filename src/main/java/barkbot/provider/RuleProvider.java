@@ -19,6 +19,6 @@ public class RuleProvider {
 
     @Bean
     public ImageContainsDogRule imageContainsDogRule() {
-        return new ImageContainsDogRule(transformerProvider.stringToUrlTransformer(), clientProvider.labelRekognition());
+        return new ImageContainsDogRule(transformerProvider.stringToUrlTransformer(), clientProvider.detectLabelsRekognitionClient());
     }
 }

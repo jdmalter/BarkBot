@@ -1,6 +1,6 @@
 package barkbot.rule;
 
-import barkbot.client.LabelRekognitionClient;
+import barkbot.client.DetectLabelsRekognitionClient;
 import barkbot.model.Attachment;
 import barkbot.model.Message;
 import barkbot.transformer.UrlToByteBufferTransformer;
@@ -17,7 +17,7 @@ public class ImageContainsDogRule implements Rule {
     @NonNull
     private final UrlToByteBufferTransformer urlToByteBufferTransformer;
     @NonNull
-    private final LabelRekognitionClient labelRekognitionClient;
+    private final DetectLabelsRekognitionClient detectLabelsRekognitionClient;
 
     @Override
     public boolean accepts(@NonNull final Message message) {
@@ -33,7 +33,7 @@ public class ImageContainsDogRule implements Rule {
 
     private boolean consequent(final Attachment attachment) {
         final Image image = new Image().withBytes(urlToByteBufferTransformer.convert(attachment.getUrl()));
-        return labelRekognitionClient.call(image)
+        return detectLabelsRekognitionClient.call(image)
                 .stream()
                 .map(Label::getName)
                 .anyMatch(ACCEPTED_LABEL::equals);

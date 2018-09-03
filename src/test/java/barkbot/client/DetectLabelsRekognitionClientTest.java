@@ -17,10 +17,10 @@ import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-class LabelRekognitionClientTest {
+class DetectLabelsRekognitionClientTest {
     private static final int MAXIMUM_LABELS_SIZE = 16;
 
-    private LabelRekognitionClient subject;
+    private DetectLabelsRekognitionClient subject;
     @Mock
     private AmazonRekognition rekognition;
     private int maxLabels;
@@ -33,7 +33,7 @@ class LabelRekognitionClientTest {
         minConfidence = RandomPrimitiveFactory.createFloat() * 100;
         // no sleeping during testing
         retryTimeout = 0;
-        subject = new LabelRekognitionClient(rekognition, maxLabels, minConfidence, retryTimeout);
+        subject = new DetectLabelsRekognitionClient(rekognition, maxLabels, minConfidence, retryTimeout);
     }
 
     @Test

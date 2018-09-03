@@ -1,7 +1,10 @@
 package barkbot.provider;
 
-import barkbot.client.LabelRekognitionClient;
+import barkbot.client.DecryptKMSClient;
+import barkbot.client.DetectLabelsRekognitionClient;
 import barkbot.client.PostToGroupMeClient;
+import com.amazonaws.services.kms.AWSKMS;
+import com.amazonaws.services.kms.AWSKMSClientBuilder;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import org.apache.http.client.HttpClient;
@@ -13,23 +16,30 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClientProvider {
     @Value("${MAX_LABELS}")
-    private int MAX_LABELS;
+    private int maxLabels;
     @Value("${MIN_CONFIDENCE}")
-    private float MIN_CONFIDENCE;
+    private float minConfidence;
     @Value("${RETRY_TIMEOUT}")
-    private long RETRY_TIMEOUT;
-    @Value("${BOT_ID}")
-    private String BOT_ID;
+    private long retryTimeout;
+    @Value("${SECRET}")
+    private String secret;
 
     @Bean
-    public LabelRekognitionClient labelRekognition() {
+    public DecryptKMSClient decryptKMSClient() {
+        final AWSKMS awskms = AWSKMSClientBuilder.defaultClient();
+        return new DecryptKMSClient(awskms);
+    }
+
+    @Bean
+    public DetectLabelsRekognitionClient detectLabelsRekognitionClient() {
         final AmazonRekognition rekognition = AmazonRekognitionClientBuilder.defaultClient();
-        return new LabelRekognitionClient(rekognition, MAX_LABELS, MIN_CONFIDENCE, RETRY_TIMEOUT);
+        return new DetectLabelsRekognitionClient(rekognition, maxLabels, minConfidence, retryTimeout);
     }
 
     @Bean
     public PostToGroupMeClient postToGroupMeClient() {
         final HttpClient client = HttpClients.createDefault();
-        return new PostToGroupMeClient(client, BOT_ID);
+        final String botId = decryptKMSClient().decrypt(secret);
+        return new PostToGroupMeClient(client, botId);
     }
 }

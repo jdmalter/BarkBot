@@ -1,6 +1,6 @@
 package barkbot.rule;
 
-import barkbot.client.LabelRekognitionClient;
+import barkbot.client.DetectLabelsRekognitionClient;
 import barkbot.factory.RandomAttachmentFactory;
 import barkbot.factory.RandomMessageFactory;
 import barkbot.model.Attachment;
@@ -26,11 +26,11 @@ class ImageContainsDogRuleTest {
     @Mock
     private UrlToByteBufferTransformer urlToByteBufferTransformer;
     @Mock
-    private LabelRekognitionClient labelRekognitionClient;
+    private DetectLabelsRekognitionClient detectLabelsRekognitionClient;
 
     @BeforeEach
     void setUp() {
-        subject = new ImageContainsDogRule(urlToByteBufferTransformer, labelRekognitionClient);
+        subject = new ImageContainsDogRule(urlToByteBufferTransformer, detectLabelsRekognitionClient);
     }
 
     @Test
@@ -54,7 +54,7 @@ class ImageContainsDogRuleTest {
         final Message message = createMessage(new Attachment(ImageContainsDogRule.ACCEPTED_TYPE, string));
         final Image image = new Image().withBytes(byteBuffer);
         Mockito.when(urlToByteBufferTransformer.convert(string)).thenReturn(byteBuffer);
-        Mockito.when(labelRekognitionClient.call(image)).thenReturn(Lists.newArrayList());
+        Mockito.when(detectLabelsRekognitionClient.call(image)).thenReturn(Lists.newArrayList());
 
         Assertions.assertFalse(subject.accepts(message));
     }
@@ -66,7 +66,7 @@ class ImageContainsDogRuleTest {
         final Message message = createMessage(new Attachment(ImageContainsDogRule.ACCEPTED_TYPE, string));
         final Image image = new Image().withBytes(byteBuffer);
         Mockito.when(urlToByteBufferTransformer.convert(string)).thenReturn(byteBuffer);
-        Mockito.when(labelRekognitionClient.call(image))
+        Mockito.when(detectLabelsRekognitionClient.call(image))
                 .thenReturn(Lists.newArrayList(new Label().withName(ImageContainsDogRule.ACCEPTED_LABEL)));
 
         Assertions.assertTrue(subject.accepts(message));

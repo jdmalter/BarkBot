@@ -7,17 +7,17 @@ import lombok.NonNull;
 
 import java.util.List;
 
-public class LabelRekognitionClient {
+public class DetectLabelsRekognitionClient {
     @NonNull
     private final AmazonRekognition rekognition;
     private final int maxLabels;
     private final float minConfidence;
     private final long retryTimeout;
 
-    public LabelRekognitionClient(@NonNull final AmazonRekognition rekognition,
-                                  final int maxLabels,
-                                  final float minConfidence,
-                                  final long retryTimeout) {
+    public DetectLabelsRekognitionClient(@NonNull final AmazonRekognition rekognition,
+                                         final int maxLabels,
+                                         final float minConfidence,
+                                         final long retryTimeout) {
         Preconditions.checkArgument(
                 maxLabels >= 0,
                 "maxLabels (%s) must be at least 0",
