@@ -27,7 +27,7 @@ class DecryptKMSClientTest {
 
     @Test
     void successfulDecrypt() {
-        final String expected = RandomPrimitiveFactory.createString();
+        final String expected = "expected";
         final String secret = RandomPrimitiveFactory.createString();
         final DecryptRequest request = new DecryptRequest()
                 .withCiphertextBlob(ByteBuffer.wrap(secret.getBytes()));
