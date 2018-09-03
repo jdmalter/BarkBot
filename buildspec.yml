@@ -11,6 +11,4 @@ phases:
       --output-template-file outputTemplate.yaml
 artifacts:
   files:
-  - target/bark-bot-1.0-SNAPSHOT.jar
-  - template.yaml
   - outputTemplate.yaml
