@@ -8,7 +8,7 @@ Resources:
       Handler: barkbot.Launcher::handleRequest
       Runtime: java8
       CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: BarkBot
+      FunctionName: BarkBotBeta
       Description: Handles new messages.
       MemorySize: 256
       Timeout: 30

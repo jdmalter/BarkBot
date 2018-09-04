@@ -1,6 +1,8 @@
 package barkbot.client;
 
+import barkbot.factory.RandomMentionFactory;
 import barkbot.factory.RandomPrimitiveFactory;
+import barkbot.model.Mention;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.junit.jupiter.api.Assertions;
@@ -28,8 +30,9 @@ class PostToGroupMeClientTest {
     @Test
     void successfulCall() throws IOException {
         final String text = RandomPrimitiveFactory.createString();
+        final Mention mention = RandomMentionFactory.create();
 
-        subject.call(text);
+        subject.call(text, mention);
 
         Mockito.verify(client).execute(Mockito.any(HttpPost.class));
     }
@@ -37,8 +40,9 @@ class PostToGroupMeClientTest {
     @Test
     void throwIOException() throws IOException {
         final String text = RandomPrimitiveFactory.createString();
+        final Mention mention = RandomMentionFactory.create();
         Mockito.doThrow(IOException.class).when(client).execute(Mockito.any(HttpPost.class));
 
-        Assertions.assertThrows(UncheckedIOException.class, () -> subject.call(text));
+        Assertions.assertThrows(UncheckedIOException.class, () -> subject.call(text, mention));
     }
 }

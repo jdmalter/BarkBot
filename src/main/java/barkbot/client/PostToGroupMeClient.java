@@ -1,5 +1,6 @@
 package barkbot.client;
 
+import barkbot.model.Mention;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +25,18 @@ public class PostToGroupMeClient {
     @NonNull
     private final Supplier<String> botIdSupplier;
 
-    public void call(@NonNull final String text) {
-        log.info("text={}", text);
+    public void call(@NonNull final String text, @NonNull final Mention mention) {
+        log.info("text={} mention={}", text, mention);
         final HttpPost post = new HttpPost(POST_URL);
+
         try {
             post.setEntity(
                     new UrlEncodedFormEntity(
                             Lists.newArrayList(
                                     new BasicNameValuePair("bot_id", botIdSupplier.get()),
-                                    new BasicNameValuePair("text", text))));
+                                    new BasicNameValuePair("text", text),
+                                    new BasicNameValuePair("attachments", mention.toAttachmentJson()))));
+
         } catch (final UnsupportedEncodingException e) {
             log.error("bug in JVM; buy lottery tickets", e);
             throw new AssertionError("bug in JVM; buy lottery tickets");

@@ -32,7 +32,8 @@ public class ImageContainsDogRule implements Rule {
     }
 
     private boolean consequent(final Attachment attachment) {
-        final Image image = new Image().withBytes(urlToByteBufferTransformer.convert(attachment.getUrl()));
+        final Image image = new Image()
+                .withBytes(urlToByteBufferTransformer.convert(attachment.getUrl()));
         return detectLabelsRekognitionClient.call(image)
                 .stream()
                 .map(Label::getName)
