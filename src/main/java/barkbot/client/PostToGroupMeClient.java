@@ -24,7 +24,7 @@ public class PostToGroupMeClient {
     private final Supplier<String> botIdSupplier;
 
     public void call(@NonNull final String text, @NonNull final Mention offender, @NonNull final Mention notified) {
-        log.info("text={} offender={}", text, offender);
+        log.info("text={} offender={} notified={}", text, offender, notified);
         final HttpPost post = new HttpPost(POST_URL);
         final String string = String.format(
                 "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s,%s]}",
