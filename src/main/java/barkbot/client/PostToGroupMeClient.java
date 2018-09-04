@@ -38,11 +38,10 @@ public class PostToGroupMeClient {
                                     new BasicNameValuePair("attachments", mention.toAttachmentJson()))));
 
         } catch (final UnsupportedEncodingException e) {
-            log.error("bug in JVM; buy lottery tickets", e);
             throw new AssertionError("bug in JVM; buy lottery tickets");
         }
 
-        log.info("post={}", post);
+        log.info("post={} entity={}", post, post.getEntity());
         safeCall(post);
     }
 
@@ -51,7 +50,6 @@ public class PostToGroupMeClient {
             client.execute(post);
 
         } catch (final IOException e) {
-            log.error("error in connection", e);
             throw new UncheckedIOException("error in connection", e);
         }
     }

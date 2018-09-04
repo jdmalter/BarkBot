@@ -59,7 +59,7 @@ class JsonToMessageTransformerTest {
 
     @Test
     void badMapping() throws IOException {
-        testObjectMapperException(JsonMappingException.class, AssertionError.class);
+        testObjectMapperException(JsonMappingException.class, IllegalArgumentException.class);
     }
 
     @Test

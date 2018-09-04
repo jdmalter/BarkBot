@@ -26,8 +26,16 @@ public class Launcher implements RequestHandler<Request, Response> {
     @Override
     public Response handleRequest(@NonNull final Request request, final Context context) {
         log.info("request={}", request);
-        final Handler handler = applicationContext.getBean(Handler.class);
-        handler.accept(request.getBody());
+
+        try {
+            final Handler handler = applicationContext.getBean(Handler.class);
+            handler.accept(request.getBody());
+
+        } catch (final Exception e) {
+            log.error(e.getMessage(), e);
+            return Response.ok();
+        }
+
         return Response.ok();
     }
 }
