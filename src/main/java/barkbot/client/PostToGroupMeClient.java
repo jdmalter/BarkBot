@@ -1,14 +1,12 @@
 package barkbot.client;
 
 import barkbot.model.Mention;
-import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -28,20 +26,20 @@ public class PostToGroupMeClient {
     public void call(@NonNull final String text, @NonNull final Mention mention) {
         log.info("text={} mention={}", text, mention);
         final HttpPost post = new HttpPost(POST_URL);
+        final String string = String.format(
+                "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":%s}",
+                botIdSupplier.get(),
+                text,
+                mention.toAttachmentJson());
 
         try {
-            post.setEntity(
-                    new UrlEncodedFormEntity(
-                            Lists.newArrayList(
-                                    new BasicNameValuePair("bot_id", botIdSupplier.get()),
-                                    new BasicNameValuePair("text", text),
-                                    new BasicNameValuePair("attachments", mention.toAttachmentJson()))));
+            post.addHeader("content-type", "application/json");
+            post.setEntity(new StringEntity(string));
 
         } catch (final UnsupportedEncodingException e) {
             throw new AssertionError("bug in JVM; buy lottery tickets");
         }
 
-        log.info("post={} entity={}", post, post.getEntity());
         safeCall(post);
     }
 
