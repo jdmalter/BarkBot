@@ -42,6 +42,7 @@ public class PostToGroupMeClient {
             throw new AssertionError("bug in JVM; buy lottery tickets");
         }
 
+        log.info("post={}", post);
         safeCall(post);
     }
 

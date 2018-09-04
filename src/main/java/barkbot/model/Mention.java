@@ -28,6 +28,6 @@ public class Mention {
     }
 
     public String toAttachmentJson() {
-        return String.format("[{\"type\":\"mentions\",\"user_ids\":[%s],\"loci\":[[%s,%s]]}]", userId, offset, length);
+        return String.format("[{\"type\":\"mentions\",\"user_ids\":[%s],\"loci\":[[%d,%d]]}]", userId, offset, length);
     }
 }
