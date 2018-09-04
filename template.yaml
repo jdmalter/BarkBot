@@ -17,11 +17,13 @@ Resources:
       - AmazonS3ReadOnlyAccess
       Environment:
         Variables:
-          MAX_LABELS: 10
-          MIN_CONFIDENCE: 50
+          MAX_LABELS: 20
+          MIN_CONFIDENCE: 25
           RETRY_TIMEOUT: 1000
           BUCKET_NAME: bot-id
           KEY: BarkBotBeta.txt
+          NOTIFIED_NAME: Protector Of Dogs
+          NOTIFIED_USER_ID: 19893666
       Events:
         GroupMeCallBack:
           Type: Api

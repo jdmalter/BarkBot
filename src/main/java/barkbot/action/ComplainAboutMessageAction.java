@@ -8,19 +8,29 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ComplainAboutMessageAction implements Action {
-    static final String POST_TEXT_FORMAT = "BARK BARK!! @%s";
+    static final String POST_TEXT_FORMAT = "Hey @%s, that image doesn't look like a dog. @%s, is this alright?!";
 
     @NonNull
     private final PostToGroupMeClient postToGroupMeClient;
+    @NonNull
+    private final String notifiedName;
+    @NonNull
+    private final String notifiedUserId;
 
     @Override
     public void execute(@NonNull final Message message) {
-        final String postText = String.format(POST_TEXT_FORMAT, message.getName());
-        final Mention mention = Mention.builder()
+        final String postText = String.format(POST_TEXT_FORMAT, message.getName(), notifiedName);
+        final Mention offender = Mention.builder()
                 .userId(message.getUserId())
                 .offset(POST_TEXT_FORMAT.indexOf('@'))
                 .length(1 + message.getName().length())
                 .build();
-        postToGroupMeClient.call(postText, mention);
+        final int fromIndex = POST_TEXT_FORMAT.indexOf('@') + 1 + message.getName().length();
+        final Mention notified = Mention.builder()
+                .userId(notifiedUserId)
+                .offset(POST_TEXT_FORMAT.indexOf('@', fromIndex))
+                .length(1 + notifiedName.length())
+                .build();
+        postToGroupMeClient.call(postText, offender, notified);
     }
 }

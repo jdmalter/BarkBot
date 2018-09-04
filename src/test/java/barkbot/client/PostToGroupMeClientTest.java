@@ -30,9 +30,10 @@ class PostToGroupMeClientTest {
     @Test
     void successfulCall() throws IOException {
         final String text = RandomPrimitiveFactory.createString();
-        final Mention mention = RandomMentionFactory.create();
+        final Mention offender = RandomMentionFactory.create();
+        final Mention notified = RandomMentionFactory.create();
 
-        subject.call(text, mention);
+        subject.call(text, offender, notified);
 
         Mockito.verify(client).execute(Mockito.any(HttpPost.class));
     }
@@ -40,9 +41,10 @@ class PostToGroupMeClientTest {
     @Test
     void throwIOException() throws IOException {
         final String text = RandomPrimitiveFactory.createString();
-        final Mention mention = RandomMentionFactory.create();
+        final Mention offender = RandomMentionFactory.create();
+        final Mention notified = RandomMentionFactory.create();
         Mockito.doThrow(IOException.class).when(client).execute(Mockito.any(HttpPost.class));
 
-        Assertions.assertThrows(UncheckedIOException.class, () -> subject.call(text, mention));
+        Assertions.assertThrows(UncheckedIOException.class, () -> subject.call(text, offender, notified));
     }
 }

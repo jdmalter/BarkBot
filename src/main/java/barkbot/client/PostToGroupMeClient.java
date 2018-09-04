@@ -23,14 +23,15 @@ public class PostToGroupMeClient {
     @NonNull
     private final Supplier<String> botIdSupplier;
 
-    public void call(@NonNull final String text, @NonNull final Mention mention) {
-        log.info("text={} mention={}", text, mention);
+    public void call(@NonNull final String text, @NonNull final Mention offender, @NonNull final Mention notified) {
+        log.info("text={} offender={}", text, offender);
         final HttpPost post = new HttpPost(POST_URL);
         final String string = String.format(
-                "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":%s}",
+                "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s,%s]}",
                 botIdSupplier.get(),
                 text,
-                mention.toAttachmentJson());
+                offender.toAttachmentJson(),
+                notified.toAttachmentJson());
 
         try {
             post.addHeader("content-type", "application/json");
