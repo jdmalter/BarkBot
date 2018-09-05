@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ImageContainsDogRule implements Rule {
-    static final String ACCEPTED_TYPE = "image";
+    public static final String ACCEPTED_TYPE = "image";
     static final String ACCEPTED_LABEL = "Dog";
 
     @NonNull

@@ -39,7 +39,7 @@ class PostToGroupMeClientTest {
     }
 
     @Test
-    void throwIOException() throws IOException {
+    void badIO() throws IOException {
         final String text = RandomPrimitiveFactory.createString();
         final Mention offender = RandomMentionFactory.create();
         final Mention notified = RandomMentionFactory.create();

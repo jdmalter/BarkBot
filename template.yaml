@@ -14,16 +14,17 @@ Resources:
       Timeout: 30
       Policies:
       - AmazonRekognitionFullAccess
-      - AmazonS3ReadOnlyAccess
+      - AmazonS3FullAccess
       Environment:
         Variables:
-          MAX_LABELS: 20
-          MIN_CONFIDENCE: 25
+          MAX_LABELS: 10
+          MIN_CONFIDENCE: 50
           RETRY_TIMEOUT: 1000
           BUCKET_NAME: bot-id
           KEY: BarkBotBeta.txt
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
+          MESSAGE_BUCKET: not-dog-pictures
       Events:
         GroupMeCallBack:
           Type: Api

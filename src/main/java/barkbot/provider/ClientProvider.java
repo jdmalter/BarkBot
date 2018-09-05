@@ -3,6 +3,7 @@ package barkbot.provider;
 import barkbot.client.DetectLabelsRekognitionClient;
 import barkbot.client.GetObjectContentS3Client;
 import barkbot.client.PostToGroupMeClient;
+import barkbot.client.PutObjectS3Client;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
@@ -46,5 +47,11 @@ public class ClientProvider {
         final GetObjectContentS3Client getObjectContentS3Client = getObjectContentS3Client();
         final Supplier<String> botIdSupplier = () -> getObjectContentS3Client.call(bucketName, key);
         return new PostToGroupMeClient(client, botIdSupplier);
+    }
+
+    @Bean
+    public PutObjectS3Client putObjectS3Client() {
+        final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
+        return new PutObjectS3Client(s3, retryTimeout);
     }
 }

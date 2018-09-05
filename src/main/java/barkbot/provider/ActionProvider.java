@@ -1,8 +1,10 @@
 package barkbot.provider;
 
 import barkbot.action.ComplainAboutMessageAction;
+import barkbot.action.UploadMessageAction;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +20,20 @@ public class ActionProvider {
     private String notifiedName;
     @Value("${NOTIFIED_USER_ID}")
     private String notifiedUserId;
+    @Value("${MESSAGE_BUCKET}")
+    private String messageBucket;
+    @Value("${MAX_LABELS}")
+    private int maxLabels;
+    @Value("${MIN_CONFIDENCE}")
+    private float minConfidence;
 
     @Bean
     public ComplainAboutMessageAction complainAboutMessageAction() {
         return new ComplainAboutMessageAction(clientProvider.postToGroupMeClient(), notifiedName, notifiedUserId);
+    }
+
+    @Bean
+    public UploadMessageAction uploadMessageAction() {
+        return new UploadMessageAction(FileUtils::writeStringToFile, clientProvider.putObjectS3Client(), messageBucket, maxLabels, minConfidence);
     }
 }

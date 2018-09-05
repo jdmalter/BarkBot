@@ -1,6 +1,7 @@
 package barkbot;
 
 import barkbot.action.ComplainAboutMessageAction;
+import barkbot.action.UploadMessageAction;
 import barkbot.factory.RandomMessageFactory;
 import barkbot.factory.RandomPrimitiveFactory;
 import barkbot.model.Message;
@@ -22,10 +23,12 @@ class HandlerTest {
     private ImageContainsDogRule imageContainsDogRule;
     @Mock
     private ComplainAboutMessageAction complainAboutMessageAction;
+    @Mock
+    private UploadMessageAction uploadMessageAction;
 
     @BeforeEach
     void setUp() {
-        subject = new Handler(jsonToMessageTransformer, imageContainsDogRule, complainAboutMessageAction);
+        subject = new Handler(jsonToMessageTransformer, imageContainsDogRule, complainAboutMessageAction, uploadMessageAction);
     }
 
     @Test
@@ -38,6 +41,7 @@ class HandlerTest {
         subject.accept(json);
 
         Mockito.verify(complainAboutMessageAction, Mockito.never()).execute(message);
+        Mockito.verify(uploadMessageAction, Mockito.never()).execute(message);
     }
 
     @Test
@@ -50,5 +54,6 @@ class HandlerTest {
         subject.accept(json);
 
         Mockito.verify(complainAboutMessageAction).execute(message);
+        Mockito.verify(uploadMessageAction).execute(message);
     }
 }

@@ -26,6 +26,7 @@ public class HandlerProvider {
     public Handler handler() {
         return new Handler(transformerProvider.jsonToMessageTransformer(),
                 ruleProvider.imageContainsDogRule(),
-                actionProvider.complainAboutMessageAction());
+                actionProvider.complainAboutMessageAction(),
+                actionProvider.uploadMessageAction());
     }
 }
