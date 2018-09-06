@@ -1,6 +1,6 @@
 package barkbot.provider;
 
-import barkbot.Handler;
+import barkbot.BarkBot;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class HandlerProvider {
     private final RuleProvider ruleProvider;
 
     @Bean
-    public Handler handler() {
-        return new Handler(transformerProvider.jsonToMessageTransformer(),
+    public BarkBot handler() {
+        return new BarkBot(transformerProvider.jsonToMessageTransformer(),
                 ruleProvider.imageContainsDogRule(),
                 actionProvider.complainAboutMessageAction(),
                 actionProvider.uploadMessageAction());

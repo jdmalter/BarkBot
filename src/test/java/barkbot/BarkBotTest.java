@@ -15,8 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class HandlerTest {
-    private Handler subject;
+class BarkBotTest {
+    private BarkBot subject;
     @Mock
     private JsonToMessageTransformer jsonToMessageTransformer;
     @Mock
@@ -28,7 +28,7 @@ class HandlerTest {
 
     @BeforeEach
     void setUp() {
-        subject = new Handler(jsonToMessageTransformer, imageContainsDogRule, complainAboutMessageAction, uploadMessageAction);
+        subject = new BarkBot(jsonToMessageTransformer, imageContainsDogRule, complainAboutMessageAction, uploadMessageAction);
     }
 
     @Test

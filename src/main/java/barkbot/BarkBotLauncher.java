@@ -11,15 +11,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @Slf4j
-public class Launcher implements RequestHandler<Request, Response> {
+public class BarkBotLauncher implements RequestHandler<Request, Response> {
     @NonNull
     private final ApplicationContext applicationContext;
 
-    public Launcher() {
+    public BarkBotLauncher() {
         this(new AnnotationConfigApplicationContext(HandlerProvider.class));
     }
 
-    public Launcher(@NonNull final ApplicationContext applicationContext) {
+    public BarkBotLauncher(@NonNull final ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -28,8 +28,8 @@ public class Launcher implements RequestHandler<Request, Response> {
         log.info("request={}", request);
 
         try {
-            final Handler handler = applicationContext.getBean(Handler.class);
-            handler.accept(request.getBody());
+            final BarkBot barkBot = applicationContext.getBean(BarkBot.class);
+            barkBot.accept(request.getBody());
 
         } catch (final IllegalArgumentException e) {
             log.error(e.getMessage(), e);

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Handler {
+public class BarkBot {
     @NonNull
     private final JsonToMessageTransformer jsonToMessageTransformer;
     @NonNull

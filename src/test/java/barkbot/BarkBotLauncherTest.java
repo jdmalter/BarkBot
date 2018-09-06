@@ -11,25 +11,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 
 @ExtendWith(MockitoExtension.class)
-class LauncherTest {
-    private Launcher subject;
+class BarkBotLauncherTest {
+    private BarkBotLauncher subject;
     @Mock
     private ApplicationContext applicationContext;
 
     @BeforeEach
     void setUp() {
-        subject = new Launcher(applicationContext);
+        subject = new BarkBotLauncher(applicationContext);
     }
 
     @Test
     void handleRequest() {
-        final Handler handler = Mockito.mock(Handler.class);
+        final BarkBot barkBot = Mockito.mock(BarkBot.class);
         final Request request = new Request();
         final Context context = Mockito.mock(Context.class);
-        Mockito.when(applicationContext.getBean(Handler.class)).thenReturn(handler);
+        Mockito.when(applicationContext.getBean(BarkBot.class)).thenReturn(barkBot);
 
         subject.handleRequest(request, context);
 
-        Mockito.verify(handler).accept(request.getBody());
+        Mockito.verify(barkBot).accept(request.getBody());
     }
 }
