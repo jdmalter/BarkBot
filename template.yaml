@@ -35,7 +35,7 @@ Resources:
         GroupMeCallBack:
           Type: Api
           Properties:
-            Path: /
+            Path: /beta
             Method: POST
   BarkBotProd:
     Type: AWS::Serverless::Function
@@ -63,5 +63,5 @@ Resources:
         GroupMeCallBack:
           Type: Api
           Properties:
-            Path: /
+            Path: /prod
             Method: POST
