@@ -26,11 +26,16 @@ public class PostToGroupMeClient {
         log.info("text={} offender={} notified={}", text, offender, notified);
         final HttpPost post = new HttpPost(POST_URL);
         final String body = String.format(
-                "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s,%s]}",
+                "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s]}",
                 botId,
                 text,
-                offender.toAttachmentJson(),
-                notified.toAttachmentJson());
+                String.format("{\"type\":\"mentions\",\"user_ids\":[%s,%s],\"loci\":[[%d,%d],[%d,%d]]}",
+                        offender.getUserId(),
+                        notified.getUserId(),
+                        offender.getOffset(),
+                        offender.getLength(),
+                        notified.getOffset(),
+                        notified.getLength()));
         log.info("body={}", body);
 
         try {

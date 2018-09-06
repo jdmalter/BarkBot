@@ -26,8 +26,4 @@ public class Mention {
         this.offset = offset;
         this.length = length;
     }
-
-    public String toAttachmentJson() {
-        return String.format("{\"type\":\"mentions\",\"user_ids\":[%s],\"loci\":[[%d,%d]]}", userId, offset, length);
-    }
 }
