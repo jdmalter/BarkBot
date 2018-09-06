@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Barks at bad boys!
 Parameters:
-  BOT_ID_BETA:
+  BotIdBeta:
     Type: String
     Description: Identifies GroupMe bot being called.
 Resources:
@@ -24,7 +24,7 @@ Resources:
           MAX_LABELS: 10
           MIN_CONFIDENCE: 50
           RETRY_TIMEOUT: 1000
-          BOT_ID: !Ref BOT_ID_BETA
+          BOT_ID: !Ref BotIdBeta
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
           MESSAGE_BUCKET: not-dog-pictures
