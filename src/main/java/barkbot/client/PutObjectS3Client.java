@@ -38,7 +38,6 @@ public class PutObjectS3Client {
                         Thread.sleep(retryTimeout);
                     } catch (final InterruptedException ignored) {
                     }
-                    System.out.println("second");
                     s3.putObject(new PutObjectRequest(messageBucket, file.getName(), file));
                     return;
 

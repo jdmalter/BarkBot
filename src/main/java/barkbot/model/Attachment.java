@@ -18,4 +18,8 @@ public class Attachment {
         this.type = type;
         this.url = url;
     }
+
+    public String toJson() {
+        return String.format("{\"type\":\"%s\",\"url\":\"%s\"}", type, url);
+    }
 }

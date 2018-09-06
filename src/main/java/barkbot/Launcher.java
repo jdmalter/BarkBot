@@ -31,11 +31,15 @@ public class Launcher implements RequestHandler<Request, Response> {
             final Handler handler = applicationContext.getBean(Handler.class);
             handler.accept(request.getBody());
 
+        } catch (final IllegalArgumentException e) {
+            log.error(e.getMessage(), e);
+            return Response.clientError();
+
         } catch (final Exception e) {
             log.error(e.getMessage(), e);
-            return Response.ok();
+            return Response.serverError();
         }
 
-        return Response.ok();
+        return Response.success();
     }
 }

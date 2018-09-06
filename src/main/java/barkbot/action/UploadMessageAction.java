@@ -4,6 +4,7 @@ import barkbot.client.PutObjectS3Client;
 import barkbot.model.Attachment;
 import barkbot.model.Message;
 import barkbot.rule.ImageContainsDogRule;
+import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -14,11 +15,12 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class UploadMessageAction implements Action {
-    static final String DATA_FORMAT = "{\"urls\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"outcome\":\"unknown\"}";
+    static final String DATA_FORMAT = "{\"attachments\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"outcome\":\"unknown\"}";
     static final String FILE_NAME_FORMAT = "%04d-%02d-%02d-%02d-%02d-%02d-%s";
     static final Charset CHARSET = Charset.defaultCharset();
 
@@ -33,21 +35,23 @@ public class UploadMessageAction implements Action {
 
     @Override
     public void execute(@NonNull final Message message) {
-        final String data = String.format(
-                DATA_FORMAT,
-                message.getAttachments()
-                        .stream()
-                        .filter(attachment -> ImageContainsDogRule.ACCEPTED_TYPE.equals(attachment.getType()))
-                        .map(Attachment::getUrl)
-                        .map(url -> String.format("\"%s\"", url))
-                        .collect(Collectors.joining(",")),
+        final List<Attachment> acceptedAttachments = message.getAttachments()
+                .stream()
+                .filter(attachment -> ImageContainsDogRule.ACCEPTED_TYPE.equals(attachment.getType()))
+                .collect(Collectors.toList());
+        Preconditions.checkArgument(!acceptedAttachments.isEmpty(),
+                "attachments (%s) must contain at least one accepted type (%s)",
+                acceptedAttachments,
+                ImageContainsDogRule.ACCEPTED_TYPE);
+
+        final String data = String.format(DATA_FORMAT,
+                acceptedAttachments.stream().map(Attachment::toJson).collect(Collectors.joining(",")),
                 maxLabels,
                 minConfidence);
 
         final LocalDate localDate = LocalDate.now();
         final LocalTime localTime = LocalTime.now();
-        final String name = String.format(
-                FILE_NAME_FORMAT,
+        final String name = String.format(FILE_NAME_FORMAT,
                 localDate.getYear(),
                 localDate.getMonthValue(),
                 localDate.getDayOfMonth(),

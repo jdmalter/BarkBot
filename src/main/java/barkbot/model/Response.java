@@ -7,17 +7,26 @@ import java.util.Map;
 
 @Data
 public class Response {
-    private boolean isBase64Encoded;
+    private boolean isBase64Encoded = false;
     private int statusCode;
-    private Map<String, Object> headers;
-    private String body;
+    private Map<String, Object> headers = new HashMap<>();
+    private String body = "{}";
 
-    public static Response ok() {
+    public static Response success() {
         final Response response = new Response();
-        response.isBase64Encoded = false;
         response.statusCode = 200;
-        response.headers = new HashMap<>();
-        response.body = "{}";
+        return response;
+    }
+
+    public static Response clientError() {
+        final Response response = new Response();
+        response.statusCode = 400;
+        return response;
+    }
+
+    public static Response serverError() {
+        final Response response = new Response();
+        response.statusCode = 500;
         return response;
     }
 }

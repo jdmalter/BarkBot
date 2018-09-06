@@ -1,11 +1,13 @@
 package barkbot.action;
 
 import barkbot.client.PutObjectS3Client;
+import barkbot.factory.RandomAttachmentFactory;
 import barkbot.factory.RandomMessageFactory;
 import barkbot.factory.RandomPrimitiveFactory;
 import barkbot.model.Attachment;
 import barkbot.model.Message;
 import barkbot.rule.ImageContainsDogRule;
+import com.google.common.collect.ImmutableList;
 import lombok.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +47,9 @@ class UploadMessageActionTest {
 
     @Test
     void successfulCall() {
-        final Message message = RandomMessageFactory.create();
+        final Message message = RandomMessageFactory.create(
+                ImmutableList.of(
+                        RandomAttachmentFactory.create(ImageContainsDogRule.ACCEPTED_TYPE)));
         final LocalDate localDate = LocalDate.now();
         final LocalTime localTime = LocalTime.now();
         final String name = String.format(
@@ -65,6 +69,13 @@ class UploadMessageActionTest {
     }
 
     @Test
+    void badAttachments() {
+        final Message message = RandomMessageFactory.create(ImmutableList.of());
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> subject.execute(message));
+    }
+
+    @Test
     void badIO() throws IOException {
         testException(IOException.class, UncheckedIOException.class);
     }
@@ -76,7 +87,9 @@ class UploadMessageActionTest {
 
     private void testException(final Class<? extends Throwable> throwable,
                                final Class<? extends Throwable> expected) throws IOException {
-        final Message message = RandomMessageFactory.create();
+        final Message message = RandomMessageFactory.create(
+                ImmutableList.of(
+                        RandomAttachmentFactory.create(ImageContainsDogRule.ACCEPTED_TYPE)));
         final LocalDate localDate = LocalDate.now();
         final LocalTime localTime = LocalTime.now();
         final String name = String.format(
@@ -94,8 +107,7 @@ class UploadMessageActionTest {
                 message.getAttachments()
                         .stream()
                         .filter(attachment -> ImageContainsDogRule.ACCEPTED_TYPE.equals(attachment.getType()))
-                        .map(Attachment::getUrl)
-                        .map(url -> String.format("\"%s\"", url))
+                        .map(Attachment::toJson)
                         .collect(Collectors.joining(",")),
                 maxLabels,
                 minConfidence);
