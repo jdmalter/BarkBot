@@ -3,6 +3,7 @@ package barkbot.client;
 import barkbot.factory.RandomMentionFactory;
 import barkbot.factory.RandomPrimitiveFactory;
 import barkbot.model.Mention;
+import lombok.NonNull;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.junit.jupiter.api.Assertions;
@@ -21,10 +22,13 @@ class PostToGroupMeClientTest {
     private PostToGroupMeClient subject;
     @Mock
     private HttpClient client;
+    @NonNull
+    private String botId;
 
     @BeforeEach
     void setUp() {
-        subject = new PostToGroupMeClient(client, RandomPrimitiveFactory::createString);
+        botId = RandomPrimitiveFactory.createString();
+        subject = new PostToGroupMeClient(client, botId);
     }
 
     @Test

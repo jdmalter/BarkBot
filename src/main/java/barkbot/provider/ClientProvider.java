@@ -1,7 +1,6 @@
 package barkbot.provider;
 
 import barkbot.client.DetectLabelsRekognitionClient;
-import barkbot.client.GetObjectContentS3Client;
 import barkbot.client.PostToGroupMeClient;
 import barkbot.client.PutObjectS3Client;
 import com.amazonaws.services.rekognition.AmazonRekognition;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.function.Supplier;
-
 @Configuration
 public class ClientProvider {
     @Value("${MAX_LABELS}")
@@ -24,10 +21,8 @@ public class ClientProvider {
     private float minConfidence;
     @Value("${RETRY_TIMEOUT}")
     private long retryTimeout;
-    @Value("${BUCKET_NAME}")
-    private String bucketName;
-    @Value("${KEY}")
-    private String key;
+    @Value("${BOT_ID}")
+    private String botId;
 
     @Bean
     public DetectLabelsRekognitionClient detectLabelsRekognitionClient() {
@@ -36,17 +31,9 @@ public class ClientProvider {
     }
 
     @Bean
-    public GetObjectContentS3Client getObjectContentS3Client() {
-        final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
-        return new GetObjectContentS3Client(s3, retryTimeout);
-    }
-
-    @Bean
     public PostToGroupMeClient postToGroupMeClient() {
         final HttpClient client = HttpClients.createDefault();
-        final GetObjectContentS3Client getObjectContentS3Client = getObjectContentS3Client();
-        final Supplier<String> botIdSupplier = () -> getObjectContentS3Client.call(bucketName, key);
-        return new PostToGroupMeClient(client, botIdSupplier);
+        return new PostToGroupMeClient(client, botId);
     }
 
     @Bean

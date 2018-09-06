@@ -11,7 +11,6 @@ import org.apache.http.entity.StringEntity;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
-import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,14 +20,14 @@ public class PostToGroupMeClient {
     @NonNull
     private final HttpClient client;
     @NonNull
-    private final Supplier<String> botIdSupplier;
+    private final String botId;
 
     public void call(@NonNull final String text, @NonNull final Mention offender, @NonNull final Mention notified) {
         log.info("text={} offender={} notified={}", text, offender, notified);
         final HttpPost post = new HttpPost(POST_URL);
         final String string = String.format(
                 "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s,%s]}",
-                botIdSupplier.get(),
+                botId,
                 text,
                 offender.toAttachmentJson(),
                 notified.toAttachmentJson());
