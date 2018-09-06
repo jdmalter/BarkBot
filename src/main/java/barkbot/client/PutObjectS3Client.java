@@ -3,11 +3,12 @@ package barkbot.client;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.base.Preconditions;
 import lombok.NonNull;
 
-import java.io.File;
+import java.io.InputStream;
 
 public class PutObjectS3Client {
     @NonNull
@@ -24,9 +25,9 @@ public class PutObjectS3Client {
         this.retryTimeout = retryTimeout;
     }
 
-    public void call(@NonNull final String messageBucket, @NonNull final File file) {
+    public void call(@NonNull final String messageBucket, @NonNull final String key, @NonNull final InputStream input) {
         try {
-            s3.putObject(new PutObjectRequest(messageBucket, file.getName(), file));
+            s3.putObject(new PutObjectRequest(messageBucket, key, input, new ObjectMetadata()));
 
         } catch (final AmazonServiceException e) {
             switch (e.getErrorType()) {
@@ -38,7 +39,7 @@ public class PutObjectS3Client {
                         Thread.sleep(retryTimeout);
                     } catch (final InterruptedException ignored) {
                     }
-                    s3.putObject(new PutObjectRequest(messageBucket, file.getName(), file));
+                    s3.putObject(new PutObjectRequest(messageBucket, key, input, new ObjectMetadata()));
                     return;
 
                 default:

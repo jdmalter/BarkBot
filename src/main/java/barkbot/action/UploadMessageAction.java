@@ -7,11 +7,9 @@ import barkbot.rule.ImageContainsDogRule;
 import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,8 +22,6 @@ public class UploadMessageAction implements Action {
     static final String FILE_NAME_FORMAT = "%04d-%02d-%02d-%02d-%02d-%02d-%s";
     static final Charset CHARSET = Charset.defaultCharset();
 
-    @NonNull
-    private final StringToFileWriter stringToFileWriter;
     @NonNull
     private final PutObjectS3Client putObjectS3Client;
     @NonNull
@@ -44,14 +40,9 @@ public class UploadMessageAction implements Action {
                 acceptedAttachments,
                 ImageContainsDogRule.ACCEPTED_TYPE);
 
-        final String data = String.format(DATA_FORMAT,
-                acceptedAttachments.stream().map(Attachment::toJson).collect(Collectors.joining(",")),
-                maxLabels,
-                minConfidence);
-
         final LocalDate localDate = LocalDate.now();
         final LocalTime localTime = LocalTime.now();
-        final String name = String.format(FILE_NAME_FORMAT,
+        final String key = String.format(FILE_NAME_FORMAT,
                 localDate.getYear(),
                 localDate.getMonthValue(),
                 localDate.getDayOfMonth(),
@@ -59,22 +50,13 @@ public class UploadMessageAction implements Action {
                 localTime.getMinute(),
                 localTime.getSecond(),
                 message.getId());
-        final File file = new File(name);
 
-        try {
-            stringToFileWriter.write(file, data, CHARSET);
+        final String data = String.format(DATA_FORMAT,
+                acceptedAttachments.stream().map(Attachment::toJson).collect(Collectors.joining(",")),
+                maxLabels,
+                minConfidence);
+        final InputStream input = IOUtils.toInputStream(data, CHARSET);
 
-        } catch (final UnsupportedEncodingException e) {
-            throw new AssertionError("bug in JVM; buy lottery tickets");
-
-        } catch (final IOException e) {
-            throw new UncheckedIOException("error in low-level I/O", e);
-        }
-
-        putObjectS3Client.call(messageBucket, file);
-    }
-
-    public interface StringToFileWriter {
-        void write(File file, String string, Charset charset) throws UnsupportedOperationException, IOException;
+        putObjectS3Client.call(messageBucket, key, input);
     }
 }

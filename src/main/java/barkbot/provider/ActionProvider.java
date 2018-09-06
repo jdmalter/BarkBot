@@ -4,7 +4,6 @@ import barkbot.action.ComplainAboutMessageAction;
 import barkbot.action.UploadMessageAction;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +33,6 @@ public class ActionProvider {
 
     @Bean
     public UploadMessageAction uploadMessageAction() {
-        return new UploadMessageAction(FileUtils::writeStringToFile, clientProvider.putObjectS3Client(), messageBucket, maxLabels, minConfidence);
+        return new UploadMessageAction(clientProvider.putObjectS3Client(), messageBucket, maxLabels, minConfidence);
     }
 }

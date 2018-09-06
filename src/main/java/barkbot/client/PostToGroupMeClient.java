@@ -25,16 +25,17 @@ public class PostToGroupMeClient {
     public void call(@NonNull final String text, @NonNull final Mention offender, @NonNull final Mention notified) {
         log.info("text={} offender={} notified={}", text, offender, notified);
         final HttpPost post = new HttpPost(POST_URL);
-        final String string = String.format(
+        final String body = String.format(
                 "{\"bot_id\":\"%s\",\"text\":\"%s\",\"attachments\":[%s,%s]}",
                 botId,
                 text,
                 offender.toAttachmentJson(),
                 notified.toAttachmentJson());
+        log.info("body={}", body);
 
         try {
             post.addHeader("content-type", "application/json");
-            post.setEntity(new StringEntity(string));
+            post.setEntity(new StringEntity(body));
 
         } catch (final UnsupportedEncodingException e) {
             throw new AssertionError("bug in JVM; buy lottery tickets");
