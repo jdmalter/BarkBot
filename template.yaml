@@ -110,10 +110,10 @@ Resources:
       DefintionBody:
         swagger: 2.0
         info:
-          title: BarkBotApi
+          title: Bark Bot Api
           description: Accepts callbacks from GroupMe.
-        basePath: /
-        schemes: http
+        paths:
+          /:
       MethodSettings:
         DataTraceEnabled: true
         HttpMethod: POST
