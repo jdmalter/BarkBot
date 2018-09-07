@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class UploadMessageAction implements Action {
-    static final String DATA_FORMAT = "{\"attachments\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"outcome\":\"unknown\"}";
-    static final String FILE_NAME_FORMAT = "%04d-%02d-%02d-%02d-%02d-%02d-%s";
+    static final String DATA_FORMAT = "{\"attachments\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"source\":\"%s\",\"outcome\":\"unknown\"}";
+    static final String FILE_NAME_FORMAT = "%04d-%02d-%02d %02d:%02d:%02d %s";
     static final Charset CHARSET = Charset.defaultCharset();
 
     @NonNull
@@ -28,6 +28,8 @@ public class UploadMessageAction implements Action {
     private final String messageBucket;
     private final int maxLabels;
     private final float minConfidence;
+    @NonNull
+    private final String source;
 
     @Override
     public void execute(@NonNull final Message message) {
@@ -54,7 +56,8 @@ public class UploadMessageAction implements Action {
         final String data = String.format(DATA_FORMAT,
                 acceptedAttachments.stream().map(Attachment::toJson).collect(Collectors.joining(",")),
                 maxLabels,
-                minConfidence);
+                minConfidence,
+                source);
         final InputStream input = IOUtils.toInputStream(data, CHARSET);
 
         putObjectS3Client.call(messageBucket, key, input);

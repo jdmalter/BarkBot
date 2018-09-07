@@ -29,13 +29,16 @@ class UploadMessageActionTest {
     private String messageBucket;
     private int maxLabels;
     private float minConfidence;
+    @NonNull
+    private String source;
 
     @BeforeEach
     void setUp() {
         messageBucket = RandomPrimitiveFactory.createString();
         maxLabels = RandomPrimitiveFactory.createInt(Integer.MAX_VALUE);
         minConfidence = RandomPrimitiveFactory.createFloat() * 100;
-        subject = new UploadMessageAction(putObjectS3Client, messageBucket, maxLabels, minConfidence);
+        source = RandomPrimitiveFactory.createString();
+        subject = new UploadMessageAction(putObjectS3Client, messageBucket, maxLabels, minConfidence, source);
     }
 
     @Test
