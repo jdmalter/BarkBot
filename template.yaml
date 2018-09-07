@@ -41,7 +41,6 @@ Resources:
           Properties:
             Path: /bark-bot-alpha
             Method: POST
-            RestApiId: !Ref BarkBotApi
   BarkBotBeta:
     Type: AWS::Serverless::Function
     Properties:
@@ -71,7 +70,6 @@ Resources:
           Properties:
             Path: /bark-bot-beta
             Method: POST
-            RestApiId: !Ref BarkBotApi
   BarkBotProd:
     Type: AWS::Serverless::Function
     Properties:
@@ -101,29 +99,3 @@ Resources:
           Properties:
             Path: /bark-bot-prod
             Method: POST
-            RestApiId: !Ref BarkBotApi
-  BarkBotApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      Name: BarkBotApi
-      StageName: PROD
-      DefintionBody:
-        swagger: 2.0
-        info:
-          title: Bark Bot Api
-          description: Accepts callbacks from GroupMe.
-        paths:
-          /:
-      MethodSettings:
-        DataTraceEnabled: true
-        HttpMethod: POST
-        LoggingLevel: ERROR
-        MetricsEnabled: true
-        ResourcePath: /
-        ThrottlingBurstLimit: 10
-        ThrottlingRateLimit: 5
-      EndpointConfiguration: EDGE
-Outputs:
-  BaseCallbackUrl:
-    Description: Base callback URL without resource path.
-    Value: !Sub "https://${BarkBotApi}.execute-api.${AWS::Region}.amazonaws.com/${BarkBotApi.StageName}/"
