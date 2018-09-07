@@ -12,35 +12,6 @@ Parameters:
     Type: String
     Description: Identifies GroupMe bot in prod being called.
 Resources:
-  BarkBotAlpha:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: barkbot.BarkBotLauncher::handleRequest
-      Runtime: java8
-      CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: BarkBotAlpha
-      Description: Handles new messages.
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AmazonRekognitionFullAccess
-      - AmazonS3FullAccess
-      Environment:
-        Variables:
-          MAX_LABELS: 10
-          MIN_CONFIDENCE: 50
-          RETRY_TIMEOUT: 1000
-          BOT_ID: !Ref BotIdAlpha
-          NOTIFIED_NAME: Protector Of Dogs
-          NOTIFIED_USER_ID: 19893666
-          MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: !Ref BarkBotAlpha
-      Events:
-        GroupMeCallback:
-          Type: Api
-          Properties:
-            Path: /bark-bot-alpha
-            Method: POST
   BarkBotBeta:
     Type: AWS::Serverless::Function
     Properties:
@@ -63,7 +34,7 @@ Resources:
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
           MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: !Ref BarkBotBeta
+          SOURCE: BarkBotBeta
       Events:
         GroupMeCallback:
           Type: Api
@@ -92,7 +63,7 @@ Resources:
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
           MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: !Ref BarkBotProd
+          SOURCE: BarkBotProd
       Events:
         GroupMeCallback:
           Type: Api
