@@ -60,7 +60,7 @@ Resources:
                 httpMethod: POST
                 type: aws_proxy
       MethodSettings:
-        HttpMethod: *
+        HttpMethod: POST
         LoggingLevel: ERROR
         MetricsEnabled: true
         ResourcePath: /
