@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class UploadMessageAction implements Action {
-    static final String DATA_FORMAT = "{\"attachments\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"source\":\"%s\",\"outcome\":\"unknown\"}";
+    static final String DATA_FORMAT = "{\"attachments\":[%s],\"maxLabels\":%d,\"minConfidence\":%f,\"dimensionName\":\"%s\",\"outcome\":\"unknown\"}";
     static final String FILE_NAME_FORMAT = "%04d-%02d-%02d %02d:%02d:%02d %s";
     static final Charset CHARSET = Charset.defaultCharset();
 

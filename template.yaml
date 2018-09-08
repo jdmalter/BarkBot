@@ -2,23 +2,22 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Barks at bad boys!
 Parameters:
-  BotIdAlpha:
+  DimensionName:
     Type: String
-    Description: Identifies GroupMe bot in alpha being called.
-  BotIdBeta:
+    Description: Identifies the dimension being created.
+  BotId:
     Type: String
-    Description: Identifies GroupMe bot in beta being called.
-  BotIdProd:
-    Type: String
-    Description: Identifies GroupMe bot in prod being called.
+    Description: Identifies the GroupMe bot being called.
 Resources:
-  BarkBotAlpha:
+  BarkBot:
     Type: AWS::Serverless::Function
     Properties:
       Handler: barkbot.BarkBotLauncher::handleRequest
       Runtime: java8
       CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: BarkBotAlpha
+      FunctionName: !Join
+      - BarkBot
+      - !Ref DimensionName
       Description: Handles new messages.
       MemorySize: 256
       Timeout: 30
@@ -30,72 +29,14 @@ Resources:
           MAX_LABELS: 10
           MIN_CONFIDENCE: 50
           RETRY_TIMEOUT: 1000
-          BOT_ID: !Ref BotIdAlpha
+          BOT_ID: !Ref BotId
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
           MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: BarkBotAlpha
+          SOURCE: !Ref DimensionName
       Events:
         GroupMeCallback:
           Type: Api
           Properties:
-            Path: /bark-bot-alpha
-            Method: POST
-  BarkBotBeta:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: barkbot.BarkBotLauncher::handleRequest
-      Runtime: java8
-      CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: BarkBotBeta
-      Description: Handles new messages.
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AmazonRekognitionFullAccess
-      - AmazonS3FullAccess
-      Environment:
-        Variables:
-          MAX_LABELS: 10
-          MIN_CONFIDENCE: 50
-          RETRY_TIMEOUT: 1000
-          BOT_ID: !Ref BotIdBeta
-          NOTIFIED_NAME: Protector Of Dogs
-          NOTIFIED_USER_ID: 19893666
-          MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: BarkBotBeta
-      Events:
-        GroupMeCallback:
-          Type: Api
-          Properties:
-            Path: /bark-bot-beta
-            Method: POST
-  BarkBotProd:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: barkbot.BarkBotLauncher::handleRequest
-      Runtime: java8
-      CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: BarkBotProd
-      Description: Handles new messages.
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AmazonRekognitionFullAccess
-      - AmazonS3FullAccess
-      Environment:
-        Variables:
-          MAX_LABELS: 10
-          MIN_CONFIDENCE: 50
-          RETRY_TIMEOUT: 1000
-          BOT_ID: !Ref BotIdProd
-          NOTIFIED_NAME: Protector Of Dogs
-          NOTIFIED_USER_ID: 19893666
-          MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: BarkBotProd
-      Events:
-        GroupMeCallback:
-          Type: Api
-          Properties:
-            Path: /bark-bot-prod
+            Path: /bark-bot
             Method: POST
