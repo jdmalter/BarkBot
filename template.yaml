@@ -59,6 +59,12 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BarkBotLambda.Arn}/invocations
                 httpMethod: POST
                 type: aws_proxy
-      MethodSettings:
-        LoggingLevel: ERROR
+      MethodSettings: [{
+                         HttpMethod: POST,
+                         LoggingLevel: ERROR,
+                         MetricsEnabled: TRUE,
+                         ResourcePath: /,
+                         ThrottlingBurstLimit: 5,
+                         ThrottlingRateLimit: 5
+                       }]
       EndpointConfiguration: EDGE
