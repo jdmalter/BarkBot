@@ -60,6 +60,5 @@ Resources:
                 httpMethod: POST
                 type: aws_proxy
       MethodSettings:
-        ThrottlingBurstLimit: 5
-        ThrottlingRateLimit: 5
+        LoggingLevel: ERROR
       EndpointConfiguration: EDGE
