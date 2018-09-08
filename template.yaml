@@ -43,6 +43,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       Name: !Sub BarkBotApiGateway${DimensionName}
+      StageName: Prod
       DefinitionBody:
         swagger: 2.0
         info:
