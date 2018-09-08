@@ -9,16 +9,13 @@ Parameters:
     Type: String
     Description: Identifies the GroupMe bot being called.
 Resources:
-  BarkBot:
+  BarkBotLambda:
     Type: AWS::Serverless::Function
     Properties:
       Handler: barkbot.BarkBotLauncher::handleRequest
       Runtime: java8
       CodeUri: target/bark-bot-1.0-SNAPSHOT.jar
-      FunctionName: !Join
-      - ''
-      - - BarkBot
-        - !Ref DimensionName
+      FunctionName: !Sub BarkBotLambda${DimensionName}
       Description: Handles new messages.
       MemorySize: 256
       Timeout: 30
@@ -41,3 +38,32 @@ Resources:
           Properties:
             Path: /bark-bot
             Method: POST
+            RestApiId: !Ref GroupMeCallback
+  GroupMeCallback:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub BarkBotAPI${DimensionName}
+      StageName: prod
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          version: 1.0
+          title: !Sub BarkBotAPI${DimensionName}
+        paths:
+          /bark-bot:
+            post:
+              summary: Hooks GroupMe up to API Gateway.
+              produces:
+              - application/json
+              x-amazon-apigateway-integration:
+                uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/*/functions/${BarkBotLambda.Arn}/invocations
+                httpMethod: POST
+                type: aws_proxy
+      MethodSettings:
+        HttpMethod: *
+        LoggingLevel: ERROR
+        MetricsEnabled: true
+        ResourcePath: /
+        ThrottlingBurstLimit: 5
+        ThrottlingRateLimit: 5
+      EndpointConfiguration: EDGE
