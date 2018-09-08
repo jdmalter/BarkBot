@@ -42,13 +42,12 @@ Resources:
   GroupMeCallback:
     Type: AWS::Serverless::Api
     Properties:
-      Name: !Sub BarkBotAPI${DimensionName}
-      StageName: prod
+      Name: !Sub BarkBotApiGateway${DimensionName}
       DefinitionBody:
         swagger: 2.0
         info:
           version: 1.0
-          title: !Sub BarkBotAPI${DimensionName}
+          title: !Sub BarkBotApiGateway${DimensionName}
         paths:
           /bark-bot:
             post:
@@ -56,7 +55,10 @@ Resources:
               produces:
               - application/json
               x-amazon-apigateway-integration:
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/*/functions/${BarkBotLambda.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BarkBotLambda.Arn}/invocations
                 httpMethod: POST
                 type: aws_proxy
+      MethodSettings:
+        ThrottlingBurstLimit: 5
+        ThrottlingRateLimit: 5
       EndpointConfiguration: EDGE
