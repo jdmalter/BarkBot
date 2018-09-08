@@ -56,7 +56,7 @@ Resources:
               produces:
               - application/json
               x-amazon-apigateway-integration:
-                uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/*/functions/${BarkBotLambda.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/*/functions/${BarkBotLambda.Arn}/invocations
                 httpMethod: POST
                 type: aws_proxy
       EndpointConfiguration: EDGE
