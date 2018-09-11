@@ -1,5 +1,8 @@
 version: 0.2
 phases:
+  install:
+    commands:
+    - mvn install
   build:
     commands:
     - mvn package
@@ -12,3 +15,5 @@ phases:
 artifacts:
   files:
   - outputTemplate.yaml
+  cache:
+  - /root/.m2/**/*
