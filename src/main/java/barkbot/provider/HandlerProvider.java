@@ -3,29 +3,21 @@ package barkbot.provider;
 import barkbot.BarkBot;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@Import({TransformerProvider.class,
-        ActionProvider.class,
+@Import({ActionProvider.class,
         RuleProvider.class})
 @RequiredArgsConstructor
 public class HandlerProvider {
     @NonNull
-    @Autowired
-    private final TransformerProvider transformerProvider;
-    @NonNull
-    @Autowired
     private final ActionProvider actionProvider;
     @NonNull
-    @Autowired
     private final RuleProvider ruleProvider;
 
     @Bean
     public BarkBot handler() {
-        return new BarkBot(transformerProvider.jsonToMessageTransformer(),
-                ruleProvider.imageContainsDogRule(),
+        return new BarkBot(ruleProvider.imageContainsDogRule(),
                 actionProvider.complainAboutMessageAction(),
                 actionProvider.uploadMessageAction());
     }

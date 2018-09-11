@@ -25,8 +25,8 @@ public class ActionProvider {
     private int maxLabels;
     @Value("${MIN_CONFIDENCE}")
     private float minConfidence;
-    @Value("${SOURCE}")
-    private String source;
+    @Value("${DIMENSION_NAME}")
+    private String dimensionName;
 
     @Bean
     public ComplainAboutMessageAction complainAboutMessageAction() {
@@ -35,6 +35,6 @@ public class ActionProvider {
 
     @Bean
     public UploadMessageAction uploadMessageAction() {
-        return new UploadMessageAction(clientProvider.putObjectS3Client(), messageBucket, maxLabels, minConfidence, source);
+        return new UploadMessageAction(clientProvider.putObjectS3Client(), messageBucket, maxLabels, minConfidence, dimensionName);
     }
 }

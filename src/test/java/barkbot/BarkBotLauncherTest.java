@@ -1,5 +1,6 @@
 package barkbot;
 
+import barkbot.factory.RandomRequestFactory;
 import barkbot.model.Request;
 import com.amazonaws.services.lambda.runtime.Context;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class BarkBotLauncherTest {
     @Test
     void handleRequest() {
         final BarkBot barkBot = Mockito.mock(BarkBot.class);
-        final Request request = new Request();
+        final Request request = RandomRequestFactory.create();
         final Context context = Mockito.mock(Context.class);
         Mockito.when(applicationContext.getBean(BarkBot.class)).thenReturn(barkBot);
 

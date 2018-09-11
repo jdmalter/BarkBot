@@ -1,9 +1,9 @@
 package barkbot.rule;
 
 import barkbot.client.DetectLabelsRekognitionClient;
+import barkbot.client.DownloadClient;
 import barkbot.model.Attachment;
 import barkbot.model.Message;
-import barkbot.transformer.UrlToByteBufferTransformer;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.Label;
 import lombok.NonNull;
@@ -15,7 +15,7 @@ public class ImageContainsDogRule implements Rule {
     static final String ACCEPTED_LABEL = "Dog";
 
     @NonNull
-    private final UrlToByteBufferTransformer urlToByteBufferTransformer;
+    private final DownloadClient downloadClient;
     @NonNull
     private final DetectLabelsRekognitionClient detectLabelsRekognitionClient;
 
@@ -33,7 +33,7 @@ public class ImageContainsDogRule implements Rule {
 
     private boolean consequent(final Attachment attachment) {
         final Image image = new Image()
-                .withBytes(urlToByteBufferTransformer.convert(attachment.getUrl()));
+                .withBytes(downloadClient.convert(attachment.getUrl()));
         return detectLabelsRekognitionClient.call(image)
                 .stream()
                 .map(Label::getName)

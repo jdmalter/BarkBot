@@ -31,7 +31,7 @@ Resources:
           NOTIFIED_NAME: Protector Of Dogs
           NOTIFIED_USER_ID: 19893666
           MESSAGE_BUCKET: not-dog-pictures
-          SOURCE: !Ref DimensionName
+          DIMENSION_NAME: !Ref DimensionName
       Events:
         GroupMeCallback:
           Type: Api

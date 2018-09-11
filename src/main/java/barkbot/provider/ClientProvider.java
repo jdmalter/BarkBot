@@ -1,6 +1,7 @@
 package barkbot.provider;
 
 import barkbot.client.DetectLabelsRekognitionClient;
+import barkbot.client.DownloadClient;
 import barkbot.client.PostToGroupMeClient;
 import barkbot.client.PutObjectS3Client;
 import com.amazonaws.services.rekognition.AmazonRekognition;
@@ -28,6 +29,11 @@ public class ClientProvider {
     public DetectLabelsRekognitionClient detectLabelsRekognitionClient() {
         final AmazonRekognition rekognition = AmazonRekognitionClientBuilder.defaultClient();
         return new DetectLabelsRekognitionClient(rekognition, maxLabels, minConfidence, retryTimeout);
+    }
+
+    @Bean
+    public DownloadClient downloadClient() {
+        return new DownloadClient();
     }
 
     @Bean

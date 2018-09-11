@@ -1,32 +1,36 @@
 package barkbot.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Preconditions;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Data
+@Value
+@Builder
 public class Response {
-    private boolean isBase64Encoded = false;
-    private int statusCode;
-    private Map<String, Object> headers = new HashMap<>();
-    private String body = "{}";
+    @JsonProperty("status_code")
+    private final int statusCode;
+
+    public Response(@JsonProperty("status_code") @NonNull final int statusCode) {
+        Preconditions.checkArgument(
+                statusCode >= 0,
+                "statusCode (%s) must be at least 0",
+                statusCode);
+
+        this.statusCode = statusCode;
+    }
+
 
     public static Response success() {
-        final Response response = new Response();
-        response.statusCode = 200;
-        return response;
+        return new Response(200);
     }
 
     public static Response clientError() {
-        final Response response = new Response();
-        response.statusCode = 400;
-        return response;
+        return new Response(400);
     }
 
     public static Response serverError() {
-        final Response response = new Response();
-        response.statusCode = 500;
-        return response;
+        return new Response(500);
     }
 }

@@ -21,16 +21,8 @@ public class RandomMessageFactory {
     public static Message create(@NonNull final ImmutableList<Attachment> attachments) {
         return Message.builder()
                 .attachments(attachments)
-                .avatarUrl(RandomPrimitiveFactory.createString())
-                .createdAt(RandomPrimitiveFactory.createLong())
-                .groupId(RandomPrimitiveFactory.createString())
                 .id(RandomPrimitiveFactory.createString())
                 .name(RandomPrimitiveFactory.createString())
-                .senderId(RandomPrimitiveFactory.createString())
-                .senderType(RandomPrimitiveFactory.createString())
-                .sourceGuid(RandomPrimitiveFactory.createString())
-                .system(RandomPrimitiveFactory.createBoolean())
-                .text(RandomPrimitiveFactory.createString())
                 .userId(RandomPrimitiveFactory.createString())
                 .build();
     }

@@ -1,11 +1,11 @@
 package barkbot.rule;
 
 import barkbot.client.DetectLabelsRekognitionClient;
+import barkbot.client.DownloadClient;
 import barkbot.factory.RandomAttachmentFactory;
 import barkbot.factory.RandomMessageFactory;
 import barkbot.model.Attachment;
 import barkbot.model.Message;
-import barkbot.transformer.UrlToByteBufferTransformer;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.Label;
 import com.google.common.collect.ImmutableList;
@@ -24,13 +24,13 @@ import java.nio.ByteBuffer;
 class ImageContainsDogRuleTest {
     private ImageContainsDogRule subject;
     @Mock
-    private UrlToByteBufferTransformer urlToByteBufferTransformer;
+    private DownloadClient downloadClient;
     @Mock
     private DetectLabelsRekognitionClient detectLabelsRekognitionClient;
 
     @BeforeEach
     void setUp() {
-        subject = new ImageContainsDogRule(urlToByteBufferTransformer, detectLabelsRekognitionClient);
+        subject = new ImageContainsDogRule(downloadClient, detectLabelsRekognitionClient);
     }
 
     @Test
@@ -51,9 +51,12 @@ class ImageContainsDogRuleTest {
     void noDogLabels() {
         final String string = "http:///foo";
         final ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
-        final Message message = createMessage(new Attachment(ImageContainsDogRule.ACCEPTED_TYPE, string));
+        final Message message = createMessage(Attachment.builder()
+                .type(ImageContainsDogRule.ACCEPTED_TYPE)
+                .url(string)
+                .build());
         final Image image = new Image().withBytes(byteBuffer);
-        Mockito.when(urlToByteBufferTransformer.convert(string)).thenReturn(byteBuffer);
+        Mockito.when(downloadClient.convert(string)).thenReturn(byteBuffer);
         Mockito.when(detectLabelsRekognitionClient.call(image)).thenReturn(Lists.newArrayList());
 
         Assertions.assertFalse(subject.accepts(message));
@@ -61,11 +64,14 @@ class ImageContainsDogRuleTest {
 
     @Test
     void someDogLabels() {
-        final String string = "http:///foo";
+        final String string = "http:///";
         final ByteBuffer byteBuffer = Mockito.mock(ByteBuffer.class);
-        final Message message = createMessage(new Attachment(ImageContainsDogRule.ACCEPTED_TYPE, string));
+        final Message message = createMessage(Attachment.builder()
+                .type(ImageContainsDogRule.ACCEPTED_TYPE)
+                .url(string)
+                .build());
         final Image image = new Image().withBytes(byteBuffer);
-        Mockito.when(urlToByteBufferTransformer.convert(string)).thenReturn(byteBuffer);
+        Mockito.when(downloadClient.convert(string)).thenReturn(byteBuffer);
         Mockito.when(detectLabelsRekognitionClient.call(image))
                 .thenReturn(Lists.newArrayList(new Label().withName(ImageContainsDogRule.ACCEPTED_LABEL)));
 

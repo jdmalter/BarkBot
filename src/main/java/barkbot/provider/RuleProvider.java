@@ -7,19 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Import({TransformerProvider.class,
-        ClientProvider.class})
+@Import({ClientProvider.class})
 @Configuration
 @RequiredArgsConstructor
 public class RuleProvider {
-    @NonNull
-    private final TransformerProvider transformerProvider;
     @NonNull
     private final ClientProvider clientProvider;
 
     @Bean
     public ImageContainsDogRule imageContainsDogRule() {
-        return new ImageContainsDogRule(transformerProvider.stringToUrlTransformer(),
+        return new ImageContainsDogRule(clientProvider.downloadClient(),
                 clientProvider.detectLabelsRekognitionClient());
     }
 }

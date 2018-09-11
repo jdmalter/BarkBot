@@ -1,4 +1,4 @@
-package barkbot.transformer;
+package barkbot.client;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,12 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 
 @Slf4j
-public class UrlToByteBufferTransformer {
-    public ByteBuffer convert(@NonNull final String string) {
-        log.info("string={}", string);
+public class DownloadClient {
+    public ByteBuffer convert(@NonNull final String url) {
+        log.info("string={}", url);
 
         try {
-            return ByteBuffer.wrap(IOUtils.toByteArray(new URL(string)));
+            return ByteBuffer.wrap(IOUtils.toByteArray(new URL(url)));
 
         } catch (final MalformedURLException e) {
             throw new IllegalArgumentException("bad url");
