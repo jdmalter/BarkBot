@@ -1,5 +1,6 @@
 package barkbot.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
@@ -14,6 +15,7 @@ public class Mention {
     private final int offset;
     private final int length;
 
+    @JsonCreator
     public Mention(@JsonProperty("user_id") @NonNull final String userId,
                    @JsonProperty("offset") final int offset,
                    @JsonProperty("length") final int length) {

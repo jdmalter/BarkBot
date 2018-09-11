@@ -1,5 +1,6 @@
 package barkbot.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
@@ -12,6 +13,7 @@ public class Response {
     @JsonProperty("status_code")
     private final int statusCode;
 
+    @JsonCreator
     public Response(@JsonProperty("status_code") @NonNull final int statusCode) {
         Preconditions.checkArgument(
                 statusCode >= 0,

@@ -1,5 +1,6 @@
 package barkbot.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -24,6 +25,7 @@ public class Upload {
     @NonNull
     private final String outcome;
 
+    @JsonCreator
     public Upload(@JsonProperty("attachments") @NonNull final List<Attachment> attachments,
                   @JsonProperty("max_labels") final int maxLabels,
                   @JsonProperty("min_confidence") final float minConfidence,
