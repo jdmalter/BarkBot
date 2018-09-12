@@ -1,6 +1,8 @@
 package barkbot.provider;
 
 import barkbot.BarkBot;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,5 +22,12 @@ public class HandlerProvider {
         return new BarkBot(ruleProvider.imageContainsDogRule(),
                 actionProvider.complainAboutMessageAction(),
                 actionProvider.uploadMessageAction());
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
     }
 }
