@@ -9,7 +9,7 @@ public class RandomRequestFactory {
 
     public static Request create() {
         return Request.builder()
-                .body(RandomMessageFactory.create())
+                .body(RandomPrimitiveFactory.createString())
                 .build();
     }
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ComplainAboutMessageAction implements Action {
-    static final String POST_TEXT_FORMAT = "Hey @%s, that image doesn't look like a dog. @%s, is this alright?!";
+    static final String POST_TEXT_FORMAT = "Hey @%s, that image doesn't look like a dog. Please stick to dog pictures! @%s, is this alright?!";
 
     @NonNull
     private final PostToGroupMeClient postToGroupMeClient;
