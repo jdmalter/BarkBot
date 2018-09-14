@@ -25,10 +25,10 @@ public class ComplainAboutMessageAction implements Action {
                 .offset(POST_TEXT_FORMAT.indexOf('@'))
                 .length(1 + message.getName().length())
                 .build();
-        final int fromIndex = POST_TEXT_FORMAT.indexOf('@') + 1 + message.getName().length();
+        final int fromIndex = POST_TEXT_FORMAT.indexOf('@') + message.getName().length() + 1;
         final Mention notified = Mention.builder()
                 .userId(notifiedUserId)
-                .offset(POST_TEXT_FORMAT.indexOf('@', fromIndex))
+                .offset(POST_TEXT_FORMAT.indexOf('@', fromIndex) + message.getName().length() - 2)
                 .length(1 + notifiedName.length())
                 .build();
         postToGroupMeClient.call(postText, offender, notified);
